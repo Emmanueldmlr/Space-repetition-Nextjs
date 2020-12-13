@@ -1,0 +1,25 @@
+{
+  "name": "space",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@atlaskit/button": "^15.1.4",
+    "@atlaskit/css-reset": "^6.0.5",
+    "@atlaskit/icon": "^21.1.4",
+    "@atlaskit/navigation": "^37.0.2",
+    "@atlaskit/tree": "^8.2.0",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "next": "10.0.3",
+    "next-cookies": "^2.0.3",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "styled-components": "^5.2.1"
+  }
+}
