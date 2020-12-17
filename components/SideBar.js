@@ -5,12 +5,6 @@ import Drawer from '@material-ui/core/Drawer';
 import { useTheme } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -18,20 +12,28 @@ import NavItem from './NavItem'
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import SideNav from './SideNav.tsx'
+import { useStoreActions } from 'easy-peasy';
+import useUserDispatch from '../hooks/useUserDispatch'
+import {createDeck} from '../store/model/cardModel'
 import useUserState from '../hooks/useUserState'
-import useUserDispatch from "../hooks/useUserDispatch";
-
 
 const SideBar = ({handleDrawerClose, open}) => {
+    const { decks } = useUserState();
     const classes = useStyles();
     const theme = useTheme();
     const userDispatch = useUserDispatch();
     
     const handleAddDeck = () => {
-        const action = {
-            type: 'CREATE_DECK',
-          }
-        userDispatch(action)
+        const structure = {
+            payload: {
+                decks: decks,
+            }
+        }
+        const action =  createDeck(structure)
+        action.then(data => {
+            console.log(data)
+            userDispatch(data)
+        })
     }
 
     return (

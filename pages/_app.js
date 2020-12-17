@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -8,16 +8,17 @@ import UserProvider from '../context/UserContext';
 import App from "next/app";
 import cookies from "next-cookies";
 import pages from '../mockdata/data';
+// import store from '../store/models/index'
+// import { StoreProvider } from 'easy-peasy'
 
-const MyApp = ({ Component, pageProps, isAuthenticated, initialDecks }) => {
 
-    React.useEffect(() => {
+const MyApp = ({ Component, pageProps,isAuthenticated, initialDecks }) => {
+    React.useEffect(async() => {
     const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-       jssStyles.parentElement.removeChild(jssStyles);
-    }
+      if (jssStyles) {
+        jssStyles.parentElement.removeChild(jssStyles);
+      }
     }, []);
-
   return (
     <React.Fragment>
       <Head>
@@ -25,6 +26,7 @@ const MyApp = ({ Component, pageProps, isAuthenticated, initialDecks }) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>        
+        {/* <StoreProvider store={store}> */}
         <UserProvider initialState={{isAuthenticated, initialDecks}}>
           <Layout>
               <style jsx global>{`
@@ -44,6 +46,9 @@ const MyApp = ({ Component, pageProps, isAuthenticated, initialDecks }) => {
                 .gfcSzi:before, .gfcSzi:after{
                   content:none
                 }
+                .MuiSvgIcon-root{
+                  padding: 3px
+                }
               `}</style>
               {/* <style jsx global>{`
                 .kDFczx{
@@ -52,6 +57,7 @@ const MyApp = ({ Component, pageProps, isAuthenticated, initialDecks }) => {
               `}</style> */}
               <Component {...pageProps} />
           </Layout>
+        {/* </StoreProvider> */}
         </UserProvider>
       </ThemeProvider>
     </React.Fragment>
@@ -64,9 +70,7 @@ MyApp.propTypes = {
 };
 
 MyApp.getInitialProps = async (context) => {
-
-  const {pathname } = context.router;
-
+    const {pathname } = context.router;
     let isAuthenticated = false;
     let decksRequired = pathname.includes('/dashboard') || pathname.includes('/deck')
     let props = {};
@@ -74,15 +78,15 @@ MyApp.getInitialProps = async (context) => {
     if (token) {
       isAuthenticated = true;
     }
-
     const appProps = await App.getInitialProps(context);
-    props =  { ...appProps, isAuthenticated };
-
+    props =  { ...appProps};
     if(decksRequired){
-      props = { ...props, initialDecks: pages}
+      props = { ...props, initialDecks: null}
     }
     return props;
-  };
+};
+
+
 
   
   export default MyApp;

@@ -1,12 +1,13 @@
 // import { ContactSupportOutlined } from "@material-ui/icons";
 import { createContext, useReducer, useEffect } from "react";
 
+import {UpdateDeckService} from '../store/services/cardServices'
+
 export const UserStateContext = createContext();
 export const UserDispatchContext = createContext();
 
 
 const reducer = (state, action) => {
-
   switch (action.type) {
     case "isLoading": {
         return {
@@ -16,34 +17,40 @@ const reducer = (state, action) => {
     }
 
     case "CREATE_DECK": {
-        const data = { 
-            key3: { 
-                id: 'key3', 
-                children:[], 
-                hasChildren:false,
-                isExpanded:false,
-                data:{title: 'Title 1-3'}
-            }   
-        }
-        const newItem = {...state.decks.items, ...data}
-        const decks = {...state.decks, items: {...newItem}}
+        const decks = action.decks
         return ({
             ...state,
             decks
         })
-        // return {
-        //     ...state,
-        //     decks: {...state.decks,
-        //     items: {...state.decks.items, key3: {id: 'key3', children:[], hasChildren:false, isExpanded:false, data:{title: 'Title 1-3'}}}}
-        // }
     }
 
-    
+    case "TREE_ACTIONS": {
+
+        return {
+            ...state,   
+            decks: action.decks
+        }
+    }
+
+    case "CREATE_SUB_DECK":{       
+        return ({
+            ...state,
+            decks:action.decks
+        })
+    }
+
+
+    case "DRAG_END": {
+        return {
+            ...state,
+            decks: action.decks
+        }
+    }
+
     case "ADD_DECKS": {
         return {
           ...state,
-          decks: action.value,
-          drawerWidth: 300
+          decks: action.payload.data
       };
     }
     case "LOGGED_IN": {
