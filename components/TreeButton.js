@@ -4,13 +4,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Button from "@atlaskit/button";
 
 const style = {
-    button:{
-        position:'fixed',
-        left:0,
-        bottom:0,
-        width: '299px',
-        textTransform: 'initial'
-    },
     add:{
         display:'flex',
         width: 24,
@@ -29,11 +22,9 @@ const TreeButton = ({handleAddSubDeck,itemId, itemChildren, status}) => {
             onClick={() => handleAddSubDeck(itemId,itemChildren)}
             >
             {
-                status ? 
-                <>
-                    <AddBoxIcon className={style.add} />
-                    <MenuIcon className={style.add} />
-                </> : null
+                status ?  
+                <AddBoxIcon className={style.add} />
+                : null
             }
         </Button>
     )

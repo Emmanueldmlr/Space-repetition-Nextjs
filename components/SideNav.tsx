@@ -6,9 +6,7 @@ import ChevronRightIcon from "@atlaskit/icon/glyph/chevron-right";
 import Button from "@atlaskit/button";
 import useUserState from '../hooks/useUserState'
 import useUserDispatch from '../hooks/useUserDispatch'
-import AddIcon from '@material-ui/icons/Add';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import MenuIcon from '@material-ui/icons/Menu';
+
 
 //import { v4 as uuidv4 } from 'uuid';
 import uuid from 'uuid-random';
@@ -26,6 +24,7 @@ import Tree, {
     TreeDestinationPosition
     } from "@atlaskit/tree";
 import TreeButton from "./TreeButton";
+import CardMenu from "./CardMenu";
 
 
     const style = {
@@ -165,7 +164,10 @@ import TreeButton from "./TreeButton";
                             onClick={() => onCollapse(item.id)}
                         />
                         </Button>
-                        <TreeButton status={item.status} handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} itemId={item.Id} itemChildren={item.children} />
+                        <TreeButton status={item.status} 
+                        handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
+                         itemId={item.Id} itemChildren={item.children} />
+                        <CardMenu/>
                     </>
                 ) : (
                     <>
@@ -180,11 +182,21 @@ import TreeButton from "./TreeButton";
                             onClick={() => onExpand(item.id)}
                         />
                         </Button>
-                        <TreeButton status={item.status} handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} itemId={item.Id} itemChildren={item.children} />
+                        <TreeButton status={item.status}
+                         handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} 
+                         itemId={item.Id} itemChildren={item.children} />
+                        <CardMenu/>
                     </>
                 );
             }
-            return <TreeButton status={item.status} handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} itemId={item.Id} itemChildren={item.children} />;
+            return( 
+                    <>
+                        <TreeButton status={item.status} 
+                        handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
+                        itemId={item.Id} itemChildren={item.children} />
+                        <CardMenu/>
+                    </>
+                  )
         }
 
         const renderItem = ({ item, onExpand, onCollapse, provided, snapshot}: RenderItemParams) => {
@@ -206,17 +218,14 @@ import TreeButton from "./TreeButton";
             <Navigation>   
                 {
                     decks ? 
-                         <Tree
-                    tree={decks}
-                    renderItem={renderItem}
-                    onExpand={onExpand}
-                    onCollapse={onCollapse}
-                    onDragEnd={onDragEnd}
-                    isDragEnabled
-                    isNestingEnabled
-                    
-                    
-                /> 
+                        <Tree
+                        tree={decks}
+                        renderItem={renderItem}
+                        onExpand={onExpand}
+                        onCollapse={onCollapse}
+                        onDragEnd={onDragEnd}
+                        isDragEnabled
+                        isNestingEnabled /> 
                 : 
                     <p>Empty Deck</p>
                 } 
