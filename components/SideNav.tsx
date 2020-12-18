@@ -12,7 +12,7 @@ import useUserDispatch from '../hooks/useUserDispatch'
 import uuid from 'uuid-random';
 
 
-import {createSubDeck, dragEnd, fetchDeck,treeActions} from '../store/model/cardModel'
+import {createSubDeck, dragEnd, fetchDeck,treeActions, deleteDeck} from '../store/model/cardModel'
 
 
 import Tree, {
@@ -25,26 +25,6 @@ import Tree, {
     } from "@atlaskit/tree";
 import TreeButton from "./TreeButton";
 import CardMenu from "./CardMenu";
-
-
-    const style = {
-        button:{
-            position:'fixed',
-            left:0,
-            bottom:0,
-            width: '299px',
-            textTransform: 'initial'
-        },
-        add:{
-            display:'flex',
-            width: 24,
-            height: 32,
-            JustifyContent: "center",
-            fontSize: 12,
-            lineHeight: 32,
-            padding: 4
-        }
-    }
     const Container = styled.div`
     display: flex;
     `;
@@ -149,6 +129,24 @@ import CardMenu from "./CardMenu";
             
         }
 
+        const handleDeckDelete = (id) => {
+            const structure = {
+                payload: {
+                    itemId: id,
+                     decks,
+                    type: "DeleteDeck"
+                }
+            }
+            const action =  deleteDeck(structure)
+            action.then(data => {
+                userDispatch(data)
+            })
+        }
+
+        const handleDeckRename = (id) => {
+            alert(id)
+        }
+
         const getIcon = ( item: TreeItem, onExpand: (itemId: ItemId) => void, onCollapse: (itemId: ItemId) => void) =>  {
             if (item.children && item.children.length > 0) {
                 return item.isExpanded ? (
@@ -166,8 +164,11 @@ import CardMenu from "./CardMenu";
                         </Button>
                         <TreeButton status={item.status} 
                         handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
-                         itemId={item.Id} itemChildren={item.children} />
-                        <CardMenu/>
+                         itemId={item.id} itemChildren={item.children} />
+                        <CardMenu 
+                        handleDeckDelete={(id)=>handleDeckDelete(id)}
+                        handleDeckRename={(id,name)=>handleDeckRename(id,name)}
+                        status={item.status} itemId={item.id} />
                     </>
                 ) : (
                     <>
@@ -184,8 +185,11 @@ import CardMenu from "./CardMenu";
                         </Button>
                         <TreeButton status={item.status}
                          handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} 
-                         itemId={item.Id} itemChildren={item.children} />
-                        <CardMenu/>
+                         itemId={item.id} itemChildren={item.children} />
+                        <CardMenu 
+                        handleDeckDelete={(id)=>handleDeckDelete(id)}
+                        handleDeckRename={(id,name)=>handleDeckRename(id,name)}
+                        status={item.status} itemId={item.id} />
                     </>
                 );
             }
@@ -193,8 +197,11 @@ import CardMenu from "./CardMenu";
                     <>
                         <TreeButton status={item.status} 
                         handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
-                        itemId={item.Id} itemChildren={item.children} />
-                        <CardMenu/>
+                        itemId={item.id} itemChildren={item.children} />
+                        <CardMenu 
+                        handleDeckDelete={(id)=>handleDeckDelete(id)}
+                        handleDeckRename={(id,name)=>handleDeckRename(id,name)}
+                        status={item.status} itemId={item.id} />
                     </>
                   )
         }

@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import MenuIcon from '@material-ui/icons/Menu';
 import Button from "@atlaskit/button";
 
 const style = {

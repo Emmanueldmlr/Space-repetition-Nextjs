@@ -75,6 +75,43 @@ export const createSubDeck = async(actions) => {
 
 }
 
+export const deleteDeck = async(actions) => {
+    const {decks,itemId,type} = actions.payload
+    const cardChildren = decks.items[itemId].children
+    delete decks.items[itemId]
+    cardChildren.map(child => {
+        delete decks.items[child]
+        Object.keys(decks.items).map(function(key, index) {
+             decks.items[key].children = removeChildId(decks.items[key].children, child)
+        });
+    })
+    Object.keys(decks.items).map(function(key, index) {
+        decks.items[key].children = removeChildId(decks.items[key].children, itemId)
+   });
+    decks.items[1].children = removeChildId(decks.items[1].children, itemId)
+    const requestPayload = {
+        deck : decks
+    }
+    const result = await UpdateDeckService(requestPayload)
+ 
+    const action = {
+        type: 'DELETE_DECK',
+        decks: decks
+   }
+   if(result.data.status){
+        return action 
+   }
+   else{
+       console.log(result)
+   }
+}
+
+const removeChildId = (children, id) => {
+    return (
+        children.filter( child => child !== id)
+    )
+}
+
 export const createDeck = async(actions) => {
     const id = uuid()
     const data = {}
@@ -133,6 +170,8 @@ export const treeActions = async(actions) => {
         }
         return action 
 }
+
+
 
 
 
