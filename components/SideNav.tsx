@@ -25,6 +25,7 @@ import Tree, {
     TreeSourcePosition,
     TreeDestinationPosition
     } from "@atlaskit/tree";
+import TreeButton from "./TreeButton";
 
 
     const style = {
@@ -164,18 +165,7 @@ import Tree, {
                             onClick={() => onCollapse(item.id)}
                         />
                         </Button>
-                        <Button spacing="none"
-                        appearance="subtle-link"
-                        onClick={() => handleAddSubDeck(item.id,item.children)}
-                        >
-                        {
-                            item.status ? 
-                            <>
-                                <AddBoxIcon className={style.add} />
-                                <MenuIcon className={style.add} />
-                            </> : null
-                        }
-                        </Button>
+                        <TreeButton status={item.status} handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} itemId={item.Id} itemChildren={item.children} />
                     </>
                 ) : (
                     <>
@@ -190,33 +180,11 @@ import Tree, {
                             onClick={() => onExpand(item.id)}
                         />
                         </Button>
-                        <Button spacing="none"
-                        appearance="subtle-link"
-                        onClick={() => handleAddSubDeck(item.id,item.children)}     
-                        >
-                        {
-                            item.status ? 
-                            <>
-                                <AddBoxIcon className={style.add} />
-                                <MenuIcon className={style.add} />
-                            </> : null
-                        }
-                        </Button>
+                        <TreeButton status={item.status} handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} itemId={item.Id} itemChildren={item.children} />
                     </>
                 );
             }
-            return <Button spacing="none"
-                    appearance="subtle-link"
-                    onClick={() => handleAddSubDeck(item.id,item.children)}
-                    >
-                        {
-                            item.status ? 
-                            <>
-                                <AddBoxIcon className={style.add} />
-                                <MenuIcon className={style.add} />
-                            </> : null
-                        }
-                    </Button>;
+            return <TreeButton status={item.status} handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} itemId={item.Id} itemChildren={item.children} />;
         }
 
         const renderItem = ({ item, onExpand, onCollapse, provided, snapshot}: RenderItemParams) => {
