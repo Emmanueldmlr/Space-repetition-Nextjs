@@ -12,7 +12,7 @@ import useUserDispatch from '../hooks/useUserDispatch'
 import uuid from 'uuid-random';
 
 
-import {createSubDeck, dragEnd, fetchDeck,treeActions, deleteDeck} from '../store/model/cardModel'
+import {createSubDeck, dragEnd, fetchDeck,treeActions, deleteDeck, renameDeck} from '../store/model/cardModel'
 
 
 import Tree, {
@@ -143,8 +143,18 @@ import CardMenu from "./CardMenu";
             })
         }
 
-        const handleDeckRename = (id) => {
-            alert(id)
+        const handleDeckRename = (id,name) => {
+            const structure = {
+                payload: {
+                    itemId: id,
+                     decks,
+                     title: name,
+                }
+            }
+            const action =  renameDeck(structure)
+            action.then(data => {
+                userDispatch(data)
+            })
         }
 
         const getIcon = ( item: TreeItem, onExpand: (itemId: ItemId) => void, onCollapse: (itemId: ItemId) => void) =>  {
@@ -168,7 +178,8 @@ import CardMenu from "./CardMenu";
                         <CardMenu 
                         handleDeckDelete={(id)=>handleDeckDelete(id)}
                         handleDeckRename={(id,name)=>handleDeckRename(id,name)}
-                        status={item.status} itemId={item.id} />
+                        status={item.status} itemId={item.id} 
+                        initialName={item.data.title}/>
                     </>
                 ) : (
                     <>
@@ -189,7 +200,8 @@ import CardMenu from "./CardMenu";
                         <CardMenu 
                         handleDeckDelete={(id)=>handleDeckDelete(id)}
                         handleDeckRename={(id,name)=>handleDeckRename(id,name)}
-                        status={item.status} itemId={item.id} />
+                        status={item.status} itemId={item.id} 
+                        initialName={item.data.title}/>
                     </>
                 );
             }
@@ -201,7 +213,9 @@ import CardMenu from "./CardMenu";
                         <CardMenu 
                         handleDeckDelete={(id)=>handleDeckDelete(id)}
                         handleDeckRename={(id,name)=>handleDeckRename(id,name)}
-                        status={item.status} itemId={item.id} />
+                        status={item.status} itemId={item.id}
+                        initialName={item.data.title}
+                        />
                     </>
                   )
         }

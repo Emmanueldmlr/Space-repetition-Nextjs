@@ -87,8 +87,9 @@ export const deleteDeck = async(actions) => {
     })
     Object.keys(decks.items).map(function(key, index) {
         decks.items[key].children = removeChildId(decks.items[key].children, itemId)
-   });
+    });
     decks.items[1].children = removeChildId(decks.items[1].children, itemId)
+   
     const requestPayload = {
         deck : decks
     }
@@ -104,6 +105,33 @@ export const deleteDeck = async(actions) => {
    else{
        console.log(result)
    }
+}
+
+export const renameDeck = async(actions) => {
+    
+    const data = {
+        title : actions.payload.title
+    }
+    const item = mutateTree(actions.payload.decks, actions.payload.itemId,{ data: data })
+   
+    const requestPayload = {
+        deck : item
+    }
+
+    const result = await UpdateDeckService(requestPayload)
+ 
+    const action = {
+        type: 'RENAME_DECK',
+        decks: item
+   }
+
+   if(result.data.status){
+        return action 
+   }
+   else{
+       console.log(result)
+   }
+    
 }
 
 const removeChildId = (children, id) => {
@@ -144,6 +172,7 @@ export const createDeck = async(actions) => {
    }
    
 }
+
 
 export const treeActions = async(actions) => {
     const {data,itemId,status} = actions.payload

@@ -12,8 +12,7 @@ class HttpService {
 //     .then((res) => res)
 //     .catch((error) => error.response.data);
 //   };
-
-  
+ 
 
   getData = async (url) => {
     const AuthStr = 'Bearer '.concat(token); 
