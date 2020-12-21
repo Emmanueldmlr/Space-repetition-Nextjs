@@ -6,6 +6,8 @@ import ChevronRightIcon from "@atlaskit/icon/glyph/chevron-right";
 import Button from "@atlaskit/button";
 import useUserState from '../hooks/useUserState'
 import useUserDispatch from '../hooks/useUserDispatch'
+import Box from '@material-ui/core/Box';
+
 
 
 //import { v4 as uuidv4 } from 'uuid';
@@ -162,14 +164,7 @@ import CardMenu from "./CardMenu";
                             onClick={() => onCollapse(item.id)}
                         />
                         </Button>
-                        <TreeButton status={item.status} 
-                        handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
-                         itemId={item.id} itemChildren={item.children} />
-                        <CardMenu 
-                        handleDeckDelete={(id)=>handleDeckDelete(id)}
-                        handleDeckRename={(id,name)=>handleDeckRename(id,name)}
-                        status={item.status} itemId={item.id} />
-                    </>
+                        </>
                 ) : (
                     <>
                         <Button
@@ -183,18 +178,30 @@ import CardMenu from "./CardMenu";
                             onClick={() => onExpand(item.id)}
                         />
                         </Button>
-                        <TreeButton status={item.status}
-                         handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)} 
-                         itemId={item.id} itemChildren={item.children} />
-                        <CardMenu 
-                        handleDeckDelete={(id)=>handleDeckDelete(id)}
-                        handleDeckRename={(id,name)=>handleDeckRename(id,name)}
-                        status={item.status} itemId={item.id} />
                     </>
                 );
             }
             return( 
                     <>
+                                                <Button
+                        spacing="none"
+                        appearance="subtle-link"
+                        onClick={() => onExpand(item.id)}
+                        >
+                        <ChevronRightIcon
+                            label=""
+                            size="medium"
+                            onClick={() => onExpand(item.id)}
+                        />
+                        </Button>
+                    </>
+                  )
+        }
+
+        const getRHSIcon = ( item: TreeItem, onExpand: (itemId: ItemId) => void, onCollapse: (itemId: ItemId) => void) =>  {
+            return( 
+                    <>
+                    <Box   display="flex"  flexDirection="row" alignItems="center" justifyContent="flex-start">
                         <TreeButton status={item.status} 
                         handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
                         itemId={item.id} itemChildren={item.children} />
@@ -202,9 +209,11 @@ import CardMenu from "./CardMenu";
                         handleDeckDelete={(id)=>handleDeckDelete(id)}
                         handleDeckRename={(id,name)=>handleDeckRename(id,name)}
                         status={item.status} itemId={item.id} />
+                        </Box>
                     </>
                   )
         }
+
 
         const renderItem = ({ item, onExpand, onCollapse, provided, snapshot}: RenderItemParams) => {
             return (
@@ -216,6 +225,7 @@ import CardMenu from "./CardMenu";
                         dnd={{ dragHandleProps: provided.dragHandleProps }}
                         onMouseLeave={() => onHover(item.id,false)} 
                         onMouseEnter={() => onHover(item.id, true)}
+                        textAfter={getRHSIcon(item, onExpand, onCollapse)}
                     />
                 </div>
             );
