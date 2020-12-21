@@ -47,6 +47,13 @@ const reducer = (state, action) => {
         }
     }
 
+    case "RENAME_DECK": {
+        return {
+            ...state,
+            decks: action.decks
+        }
+    }
+
     case "DELETE_DECK": {
         return {
             ...state,

@@ -9,6 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MenuIcon from '@material-ui/icons/Menu';
+import CardRename from "./CardRename";
 
 const style = {
     add:{
@@ -22,7 +23,7 @@ const style = {
     }
 }
 
-const CardMenu = ({status, handleDeckDelete, handleDeckRename, itemId}) =>  {
+const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemId}) =>  {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -32,6 +33,11 @@ const CardMenu = ({status, handleDeckDelete, handleDeckRename, itemId}) =>  {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleRename = (name) => {
+    handleDeckRename(itemId,name)
+    setAnchorEl(null);
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -56,12 +62,7 @@ const CardMenu = ({status, handleDeckDelete, handleDeckRename, itemId}) =>  {
         >
             <div style={{minWidth: 200}}>
                 <List component="nav" aria-label="main mailbox folders">
-                    <ListItem onClick={()=>handleDeckRename(itemId)} button>
-                        <ListItemIcon>
-                            <EditIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Rename" />
-                    </ListItem>
+                    <CardRename handleDeckRename={(name)=>handleRename(name)} initialName={initialName} />
                     <ListItem onClick={()=>handleDeckDelete(itemId)} button>
                         <ListItemIcon>
                             <DeleteIcon  />

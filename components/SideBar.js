@@ -31,7 +31,6 @@ const SideBar = ({handleDrawerClose, open}) => {
         }
         const action =  createDeck(structure)
         action.then(data => {
-            console.log(data)
             userDispatch(data)
         })
     }

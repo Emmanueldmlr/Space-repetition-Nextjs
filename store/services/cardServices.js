@@ -9,7 +9,6 @@ export const FetchDeckService = () => {
   };
   
   export const UpdateDeckService = (payload) => {
-    console.log(payload)
     const http = new HttpService();
     const updateUrl = "decks";
     return http.putData( updateUrl , payload)

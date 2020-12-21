@@ -14,7 +14,7 @@ import Box from '@material-ui/core/Box';
 import uuid from 'uuid-random';
 
 
-import {createSubDeck, dragEnd, fetchDeck,treeActions, deleteDeck} from '../store/model/cardModel'
+import {createSubDeck, dragEnd, fetchDeck,treeActions, deleteDeck, renameDeck} from '../store/model/cardModel'
 
 
 import Tree, {
@@ -145,8 +145,18 @@ import CardMenu from "./CardMenu";
             })
         }
 
-        const handleDeckRename = (id) => {
-            alert(id)
+        const handleDeckRename = (id,name) => {
+            const structure = {
+                payload: {
+                    itemId: id,
+                     decks,
+                     title: name,
+                }
+            }
+            const action =  renameDeck(structure)
+            action.then(data => {
+                userDispatch(data)
+            })
         }
 
         const getIcon = ( item: TreeItem, onExpand: (itemId: ItemId) => void, onCollapse: (itemId: ItemId) => void) =>  {
