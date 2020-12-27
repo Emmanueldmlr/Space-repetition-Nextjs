@@ -7,9 +7,7 @@ import Layout from '../components/layout';
 import UserProvider from '../context/UserContext';
 import App from "next/app";
 import cookies from "next-cookies";
-import pages from '../mockdata/data';
-// import store from '../store/models/index'
-// import { StoreProvider } from 'easy-peasy'
+import './style.css'
 
 
 const MyApp = ({ Component, pageProps,isAuthenticated, initialDecks }) => {
@@ -26,38 +24,11 @@ const MyApp = ({ Component, pageProps,isAuthenticated, initialDecks }) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>        
-        {/* <StoreProvider store={store}> */}
         <UserProvider initialState={{isAuthenticated, initialDecks}}>
           <Layout>
-              <style jsx global>{`
-                .jbUCQa{
-                  display: none
-                }
-                .kDFczx{
-                  max-height: 450px;
-                  width: 299px;
-                }
-                .bCKIOm{
-                  background-color: #ffffff;
-                }
-                .gROfWs{
-                  min-height: 0
-                }
-                .gfcSzi:before, .gfcSzi:after{
-                  content:none
-                }
-                .MuiSvgIcon-root{
-                  padding: 3px
-                }
-              `}</style>
-              {/* <style jsx global>{`
-                .kDFczx{
-                  max-height: 450px
-                }
-              `}</style> */}
+              <Style/>
               <Component {...pageProps} />
           </Layout>
-        {/* </StoreProvider> */}
         </UserProvider>
       </ThemeProvider>
     </React.Fragment>
@@ -85,11 +56,82 @@ MyApp.getInitialProps = async (context) => {
     }
     return props;
 };
+const Style = () => {
+  return (
+    <style jsx global>{`
+      .jbUCQa{
+        display: none
+      }
+      .kDFczx{
+        max-height: 450px;
+        width: 299px;
+      }
+      .bCKIOm{
+        background-color: #ffffff;
+        height: 250px
+      }
+      .gROfWs{
+        min-height: 0
+      }
+      .gfcSzi:before, .gfcSzi:after{
+        content:none
+      }
+      .MuiSvgIcon-root{
+        padding: 3px
+      }
+      .drawerHeader{
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        justify-content: center;
+      }
+      .headerTitle{
+        font-weight: bold;
+        color: #795548;
+      }
+      .drawal{
+        width: 300;
+        flex-shrink: 0;
+        background-color: #fff
+      }
+      .makeStyles-content-10{
+        padding-top: 100px !important
+      }
+      .makeStyles-content-50{
+        margin-top: 60px !important
+      }
+      .headerIcon{
+        font-size: 16px;
+        color: #795548;
+        text-align: center
+      }
+      .iconWrapper{
+        background-color: #D0D0D0;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%
+      }
+      .MuiDivider-root{
+        display:none;
+      }
+      .bovEVy{
+        color: #795548;
+      }
+      .kOeFrb{
+        color: #795548;
+        padding-left:20px
+      }
+      .iDQOIT{
+        display:none
+      }
+      .kDFczx{
+        max-height: 300px
+      }
+    `}</style>
+  )
+}
 
-
-
-  
-  export default MyApp;
+export default MyApp;
 
 
 

@@ -7,6 +7,7 @@ import Button from "@atlaskit/button";
 import useUserState from '../hooks/useUserState'
 import useUserDispatch from '../hooks/useUserDispatch'
 import Box from '@material-ui/core/Box';
+import CardRename from './CardRename'
 
 
 
@@ -27,18 +28,18 @@ import Tree, {
     } from "@atlaskit/tree";
 import TreeButton from "./TreeButton";
 import CardMenu from "./CardMenu";
-    const Container = styled.div`
-    display: flex;
-    `;
+    // const Container = styled.div`
+    // display: flex;
+    // `;
 
-    const Dot = styled.span`
-    display: flex;
-    width: 24px;
-    height: 32px;
-    justify-content: center;
-    font-size: 12px;
-    line-height: 32px;
-    `;
+    // const Dot = styled.span`
+    // display: flex;
+    // width: 24px;
+    // height: 32px;
+    // justify-content: center;
+    // font-size: 12px;
+    // line-height: 32px;
+    // `;
 
     type State = {
     tree: TreeData;
@@ -48,8 +49,8 @@ import CardMenu from "./CardMenu";
         const userDispatch = useUserDispatch();
         const { decks } = useUserState();
         useEffect(() => {
-             const action = fetchDeck()
-             action.then(action => {
+             const result = fetchDeck()
+             result.then(action => {
                  userDispatch(action)
              })
         }, [])
@@ -115,7 +116,7 @@ import CardMenu from "./CardMenu";
             })
         };
 
-        const onHover = (itemId, status) => {
+        const onHover =  (itemId, status) => {
             const structure = {
                 payload: {
                     itemId: itemId,
@@ -124,9 +125,9 @@ import CardMenu from "./CardMenu";
                     type: "ToggleStatus"
                 }
             }
-            const action =  treeActions(structure)
-            action.then(data => {
-                userDispatch(data)
+            const action =   treeActions(structure)
+             action.then(data => {
+                 userDispatch(data)
             })
             
         }
@@ -193,16 +194,18 @@ import CardMenu from "./CardMenu";
             }
             return( 
                     <>
-                                                <Button
+                        
+                        <Button
                         spacing="none"
                         appearance="subtle-link"
                         onClick={() => onExpand(item.id)}
                         >
-                        <ChevronRightIcon
-                            label=""
-                            size="medium"
-                            onClick={() => onExpand(item.id)}
-                        />
+                            <ChevronRightIcon
+                                label=""
+                                size="medium"
+                                onClick={() => onExpand(item.id)}
+                                
+                            />
                         </Button>
                     </>
                   )
@@ -211,15 +214,19 @@ import CardMenu from "./CardMenu";
         const getRHSIcon = ( item: TreeItem, onExpand: (itemId: ItemId) => void, onCollapse: (itemId: ItemId) => void) =>  {
             return( 
                     <>
-                    <Box   display="flex"  flexDirection="row" alignItems="center" justifyContent="flex-start">
-                        <TreeButton status={item.status} 
-                        handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
-                        itemId={item.id} itemChildren={item.children} />
-                        <CardMenu 
-                        handleDeckDelete={(id)=>handleDeckDelete(id)}
-                        handleDeckRename={(id,name)=>handleDeckRename(id,name)}
-                        status={item.status} itemId={item.id} />
+                        <Box   display="flex"  flexDirection="row" alignItems="center" justifyContent="flex-start"
+                        >
+                            <TreeButton status={item.status} 
+                            handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
+                            itemId={item.id} itemChildren={item.children} />
+                            <CardMenu 
+                            handleDeckDelete={(id)=>handleDeckDelete(id)}
+                            handleDeckRename={(id,name)=>handleDeckRename(id,name)}
+                            status={item.status} itemId={item.id} > 
+                                <CardRename handleDeckRename={(name)=>handleDeckRename(item.id,name)} initialName={item.data.title} />
+                            </CardMenu>
                         </Box>
+
                     </>
                   )
         }
@@ -227,22 +234,27 @@ import CardMenu from "./CardMenu";
 
         const renderItem = ({ item, onExpand, onCollapse, provided, snapshot}: RenderItemParams) => {
             return (
-                <div ref={provided.innerRef} {...provided.draggableProps}>
+                <div ref={provided.innerRef} {...provided.draggableProps}
+                >
                     <AkNavigationItem
                         isDragging={snapshot.isDragging}
                         text={item.data ? item.data.title : ""}
                         icon={getIcon(item, onExpand, onCollapse)}
                         dnd={{ dragHandleProps: provided.dragHandleProps }}
+                        textAfter={getRHSIcon(item, onExpand, onCollapse)}
                         onMouseLeave={() => onHover(item.id,false)} 
                         onMouseEnter={() => onHover(item.id, true)}
-                        textAfter={getRHSIcon(item, onExpand, onCollapse)}
+                        // onMouseOver={() => onHover(item.id, true)}
+                        // onMouseOut={() => onHover(item.id,false)}
                     />
                 </div>
             );
         };
         return (
-        <Container>
-            <Navigation>   
+        //<Container>
+            <>
+                <Style/>
+                <Navigation>   
                 {
                     decks ? 
                         <Tree
@@ -254,13 +266,28 @@ import CardMenu from "./CardMenu";
                         isDragEnabled
                         isNestingEnabled /> 
                 : 
-                    <p>Empty Deck</p>
+                    <p className='emptyTitle'>Empty Deck</p>
                 } 
+  
+                </Navigation>
                 
-                
-            </Navigation>
-        </Container>
+            </>
+        //</Container>
         );
     }
+
+    const Style = () => {
+        return (
+          <style jsx >{`
+            .emptyTitle{
+              padding-left: 35px;
+              color: #795548; 
+            }
+            .iconStyle{
+                color: #795548 !important
+            }
+          `}</style>
+        )
+      }
 
 export default DragDropWithNextingTree;

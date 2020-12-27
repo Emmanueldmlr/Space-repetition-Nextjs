@@ -29,7 +29,7 @@ const Layout = ({children}) => {
                     [classes.contentShift]: open,
                     })}
                 >
-                    <div className={classes.drawerHeader} />
+                    {/* <div className={classes.drawerHeader} /> */}
                     {children}
                 </main>
                 

@@ -38,6 +38,7 @@ const CardRename = ({initialName, handleDeckRename}) => {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    console.log(event.currentTarget)
   };
 
   const handleClose = () => {
@@ -70,11 +71,13 @@ const CardRename = ({initialName, handleDeckRename}) => {
         anchorOrigin={{
             vertical: 'center',
             horizontal: 'right',
-          }}
-          transformOrigin={{
+        }}
+
+        transformOrigin={{
             vertical: 'center',
             horizontal: 'left',
-          }}
+        }}
+        
       >
         <Paper component="form" className={classes.root}>
             <InputBase

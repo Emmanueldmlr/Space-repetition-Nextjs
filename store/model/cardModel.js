@@ -8,18 +8,26 @@ import uuid from 'uuid-random';
 export const fetchDeck = async() => {
     try{
         const {data} = await FetchDeckService();
+        const decks = data.user.deck
+        Object.keys(decks.items).map(function(key, index) {
+            decks.items[key].isExpanded = false
+        });
+        
         const action = {
             type: 'ADD_DECKS',
             payload: {
-                data: data.user.deck,
+                data: decks,
             }
         }
-         return action
+        
+        return action
     }
     catch(error){
         console.log(error)
     }
 }
+
+
 
 export const dragEnd = async(actions) => {
     const {data,source,destination} = actions.payload
@@ -143,6 +151,7 @@ const removeChildId = (children, id) => {
 export const createDeck = async(actions) => {
     const id = uuid()
     const data = {}
+
     data[id] = { 
         id: id, 
         children:[], 
@@ -151,6 +160,7 @@ export const createDeck = async(actions) => {
         status:false,
         data:{title: 'Untitled'}
     }
+
     const item = {...actions.payload.decks.items}
     item[1].children = [...item[1].children,id] 
     const newItem = {...actions.payload.decks.items, ...data}
@@ -164,6 +174,7 @@ export const createDeck = async(actions) => {
         type: 'CREATE_DECK',
         decks: decks
    }
+
    if(result.data.status){
         return action 
    }
@@ -175,7 +186,9 @@ export const createDeck = async(actions) => {
 
 
 export const treeActions = async(actions) => {
+
     const {data,itemId,status} = actions.payload
+
         let item
         if(actions.payload.type === "ToggleStatus" ){
              item = mutateTree(data, itemId, { status: status })
@@ -197,7 +210,8 @@ export const treeActions = async(actions) => {
              type: 'TREE_ACTIONS',
              decks: item
         }
-        return action 
+
+    return action 
 }
 
 

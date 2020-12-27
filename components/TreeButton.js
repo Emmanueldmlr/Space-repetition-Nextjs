@@ -22,7 +22,7 @@ const TreeButton = ({handleAddSubDeck,itemId, itemChildren, status}) => {
             >
             {
                 status ?  
-                <AddBoxIcon className={style.add} />
+                <AddBoxIcon style={{color:  '#795548'}}  />
                 : null
             }
         </Button>

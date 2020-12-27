@@ -23,11 +23,12 @@ const style = {
     }
 }
 
-const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemId}) =>  {
+const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemId, children}) =>  {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    console.log(event.currentTarget)
   };
 
   const handleClose = () => {
@@ -44,7 +45,7 @@ const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemI
   return (
     <div>     
         {
-            status ? <MenuIcon onClick={handleClick} className={style.add} /> : null
+            status ? <MenuIcon style={{color:  '#795548'}} onClick={handleClick}  /> : null
         }
         <Popover
             id={id}
@@ -62,7 +63,7 @@ const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemI
         >
             <div style={{minWidth: 200}}>
                 <List component="nav" aria-label="main mailbox folders">
-                    <CardRename handleDeckRename={(name)=>handleRename(name)} initialName={initialName} />
+                    {children}
                     <ListItem onClick={()=>handleDeckDelete(itemId)} button>
                         <ListItemIcon>
                             <DeleteIcon  />
@@ -76,6 +77,6 @@ const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemI
   );
 }
 
-export default CardMenu
+export default  CardMenu
 
 
