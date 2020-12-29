@@ -31,7 +31,7 @@ const Dashboard = (props) => {
                 </Grid>
                 <Grid item xs={6}>
                   <Paper className='paper'>
-                    <ChartKick/>
+                    <p>Streaks</p>
                   </Paper>
                 </Grid>
                 <Grid item xs={6}>
@@ -53,14 +53,12 @@ const Style = () => {
     <style jsx >{`
       .root{
         flex-grow: 1;
-        margin-top: 10px;
+        margin: 10px 50px 0 50px;
       }
       .paper{
         padding: 16px;
         text-align: center;
         color: rgba(0, 0, 0, 0.54);
-
-
       }
       
     `}</style>
