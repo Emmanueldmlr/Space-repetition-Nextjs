@@ -14,6 +14,7 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 
 
@@ -40,6 +41,16 @@ const NavItem = () => {
                         <SearchIcon />
                     </IconButton>
                 </ListItem>
+            </List>
+            <List className='listItem'>
+                <Link href="/dashboard">
+                    <ListItem disableRipple  key='Dashboard'>
+                        <ListItemIcon>
+                            <DashboardIcon className='navItemIcon' />
+                        </ListItemIcon>
+                        <ListItemText primary={<Typography type="body2" className='navItemText'>Dashboard</Typography>} />
+                    </ListItem>
+                </Link>
             </List>
             <List className='listItem'>
                 <Link href="/streaks">

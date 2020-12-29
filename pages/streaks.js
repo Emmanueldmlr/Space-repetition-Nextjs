@@ -37,6 +37,7 @@ const Streak = () => {
             </div>
         )
     }
+    
     const checkSum = (isIncluded, day) => {
         let type 
         if (isIncluded){
