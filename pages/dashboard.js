@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import HeatMap from '@components/HeatMap';
 import ChartKick from '@components/ChartKick';
 import CalendarComponent from '@components/CalendarComponent';
+import Details from '@components/Details';
 
 
 
@@ -36,7 +37,9 @@ const Dashboard = (props) => {
                   </Paper>
                 </Grid>
                 <Grid item xs={6}>
-                  <Paper className='paper'>xs=6</Paper>
+                  <Paper className='paper details'>
+                    <Details/>
+                  </Paper>
                 </Grid>
                 <Grid item xs={12}>
                   <Paper className='paper'>
@@ -60,6 +63,9 @@ const Style = () => {
         padding: 16px;
         text-align: center;
         color: rgba(0, 0, 0, 0.54);
+      }
+      .details{
+        background-color: #e0e0e0;
       }
       
     `}</style>
