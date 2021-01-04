@@ -27,7 +27,8 @@ const Layout = ({children}) => {
                 <main
                     className={clsx(classes.content, {
                     [classes.contentShift]: open,
-                    })}
+                    }),  !open ? 'makeStyles-contentShift-11' : null}
+
                 >
                     {/* <div className={classes.drawerHeader} /> */}
                     {children}

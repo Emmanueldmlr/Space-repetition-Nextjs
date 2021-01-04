@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { makeStyles, createStyles, useTheme, Badge } from '@material-ui/core';
-import { DatePicker, MuiPickersUtilsProvider, Calendar, Day} from "@material-ui/pickers";
+import { Badge } from '@material-ui/core';
+import {  MuiPickersUtilsProvider, Calendar} from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import {fetchStreaks} from '../store/model/streakModel'
 import AlbumIcon from '@material-ui/icons/Album';

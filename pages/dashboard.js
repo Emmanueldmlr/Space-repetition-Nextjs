@@ -25,7 +25,16 @@ const Dashboard = (props) => {
         <>
            <div className='root'>
               <Style/>
-              <Grid container spacing={3}>
+              <Grid 
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                spacing={3}
+                md={12}
+                lg={9}
+                xl={9}
+              >
                 <Grid item xs={12}>
                   <Paper className='paper'>
                     <HeatMap/>
@@ -57,7 +66,8 @@ const Style = () => {
     <style jsx >{`
       .root{
         flex-grow: 1;
-        margin: 10px 50px 0 50px;
+        margin: 100px 0px 0 50px;
+
       }
       .paper{
         padding: 16px;
