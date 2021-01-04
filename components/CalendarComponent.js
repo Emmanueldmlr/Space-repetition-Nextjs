@@ -62,8 +62,11 @@ const CalendarComponent = () => {
             date={selectedDate}
             onChange={handleDateChange}
             renderDay={(day, selectedDate, isInCurrentMonth, dayComponent) => {
-                const isIncluded =   selectedDays.includes(dateConverter(day)) 
-                 const type = checkSum(isIncluded, day)
+                let isIncluded = false;
+                if(selectedDays){
+                  isIncluded =  selectedDays.includes(dateConverter(day)) 
+                }
+                const type = checkSum(isIncluded, day)
                 return <Badge>{displayElement(type)}</Badge>;
               }}
             disableFuture

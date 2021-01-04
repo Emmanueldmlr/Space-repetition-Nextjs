@@ -8,6 +8,8 @@ import uuid from 'uuid-random';
 export const fetchDeck = async() => {
     try{
         const {data} = await FetchDeckService();
+        console.log(`DECK DATA`);
+        console.log(data);
         const decks = data.user.deck
         Object.keys(decks.items).map(function(key, index) {
             decks.items[key].isExpanded = false
