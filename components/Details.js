@@ -4,12 +4,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-
-
 
 const Details = () => {
-
   return (
       <CardContent >
             <Style/>
@@ -52,12 +48,7 @@ const Style = () => {
       .detailsItemText{
           font-weight : 600;
           color: #795548;
-      }
-
-   
-    
-
-        
+      }    
       `}</style>
     )
   }

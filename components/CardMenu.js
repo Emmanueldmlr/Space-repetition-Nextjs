@@ -9,7 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MenuIcon from '@material-ui/icons/Menu';
-import CardRename from "./CardRename";
+
 
 const style = {
     add:{
@@ -23,7 +23,7 @@ const style = {
     }
 }
 
-const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemId, children}) =>  {
+const CardMenu = ({status, handleDeckDelete, toggleIsInEditMode,itemId}) =>  {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -35,8 +35,8 @@ const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemI
     setAnchorEl(null);
   };
 
-  const handleRename = (name) => {
-    handleDeckRename(itemId,name)
+  const toggleMode = () => {
+    toggleIsInEditMode(itemId)
     setAnchorEl(null);
   }
 
@@ -63,7 +63,14 @@ const CardMenu = ({status, handleDeckDelete, handleDeckRename,initialName, itemI
         >
             <div style={{minWidth: 200}}>
                 <List component="nav" aria-label="main mailbox folders">
-                    {children}
+                    
+                    <ListItem onClick={toggleMode} button>
+                        <ListItemIcon>
+                          <EditIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Rename" />
+                    </ListItem>
+
                     <ListItem onClick={()=>handleDeckDelete(itemId)} button>
                         <ListItemIcon>
                             <DeleteIcon  />

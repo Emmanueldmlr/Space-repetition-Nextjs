@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import SideNav from './SideNav.tsx'
 import useUserDispatch from '../hooks/useUserDispatch'
-import {createDeck} from '../store/model/cardModel'
+import {createDeck, dispatchBackendActions} from '../store/model/cardModel'
 import useUserState from '../hooks/useUserState'
 import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -112,16 +112,15 @@ const SideBar = ({handleDrawerClose, open}) => {
     const theme = useTheme();
     const userDispatch = useUserDispatch();
     
-    const handleAddDeck = () => {
+    const handleAddDeck = async() => {
         const structure = {
             payload: {
                 decks: decks,
             }
         }
-        const action =  createDeck(structure)
-        action.then(data => {
-            userDispatch(data)
-        })
+        const action =  await createDeck(structure)
+        await userDispatch(action)
+        dispatchBackendActions(action.decks);
     }
 
     return (

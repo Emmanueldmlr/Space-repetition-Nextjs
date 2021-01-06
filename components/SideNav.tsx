@@ -1,5 +1,4 @@
 import React, { Component, useState, useEffect } from "react";
-import styled from "styled-components";
 import Navigation, { AkNavigationItem } from "@atlaskit/navigation";
 import ChevronDownIcon from "@atlaskit/icon/glyph/chevron-down";
 import ChevronRightIcon from "@atlaskit/icon/glyph/chevron-right";
@@ -7,15 +6,15 @@ import Button from "@atlaskit/button";
 import useUserState from '../hooks/useUserState'
 import useUserDispatch from '../hooks/useUserDispatch'
 import Box from '@material-ui/core/Box';
-import CardRename from './CardRename'
+import TextField from '@material-ui/core/TextField';
+
 
 
 
 //import { v4 as uuidv4 } from 'uuid';
 import uuid from 'uuid-random';
 
-
-import {createSubDeck, dragEnd, fetchDeck,treeActions, deleteDeck, renameDeck} from '../store/model/cardModel'
+import {createSubDeck, dragEnd, fetchDeck,treeActions, deleteDeck, renameDeck, dispatchBackendActions} from '../store/model/cardModel'
 
 
 import Tree, {
@@ -28,19 +27,6 @@ import Tree, {
     } from "@atlaskit/tree";
 import TreeButton from "./TreeButton";
 import CardMenu from "./CardMenu";
-    // const Container = styled.div`
-    // display: flex;
-    // `;
-
-    // const Dot = styled.span`
-    // display: flex;
-    // width: 24px;
-    // height: 32px;
-    // justify-content: center;
-    // font-size: 12px;
-    // line-height: 32px;
-    // `;
-
     type State = {
     tree: TreeData;
     };
@@ -69,6 +55,20 @@ import CardMenu from "./CardMenu";
             })
         };
 
+        const toggleIsInEditMode = (itemId: ItemId) => {
+            const structure = {
+                payload: {
+                    itemId: itemId,
+                    data: decks,
+                    type: "EditMode",
+                }
+            }
+            const action =  treeActions(structure)
+            action.then(data => {
+                userDispatch(data)
+            })
+        }
+
         const onCollapse = (itemId: ItemId) => {
             const structure = {
                 payload: {
@@ -83,7 +83,7 @@ import CardMenu from "./CardMenu";
             })
         };
 
-        const handleAddSubDeck = (itemId, children) => {
+        const handleAddSubDeck = async (itemId, children) => {
             const id = uuid();
             children.push(id)  
             const structure = {
@@ -94,12 +94,11 @@ import CardMenu from "./CardMenu";
                     id: id
                 }
             }
-            const action =  createSubDeck(structure)
-            action.then(data => {
-                userDispatch(data)
-            })
+            const action =  await createSubDeck(structure)
+            await userDispatch(action)
+            dispatchBackendActions(action.decks);
         }
-        const onDragEnd = ( source: TreeSourcePosition, destination?: TreeDestinationPosition) => {
+        const onDragEnd = async( source: TreeSourcePosition, destination?: TreeDestinationPosition) => {
             if (!destination) {
             return;
             }
@@ -110,10 +109,9 @@ import CardMenu from "./CardMenu";
                     destination: destination
                 }
             }
-            const action =  dragEnd(structure)
-            action.then(data => {
-                userDispatch(data)
-            })
+            const action = await dragEnd(structure)
+            await userDispatch(action)
+            dispatchBackendActions(action.decks);
         };
 
         const onHover =  (itemId, status) => {
@@ -132,7 +130,7 @@ import CardMenu from "./CardMenu";
             
         }
 
-        const handleDeckDelete = (id) => {
+        const handleDeckDelete = async(id) => {
             const structure = {
                 payload: {
                     itemId: id,
@@ -140,24 +138,25 @@ import CardMenu from "./CardMenu";
                     type: "DeleteDeck"
                 }
             }
-            const action =  deleteDeck(structure)
-            action.then(data => {
-                userDispatch(data)
-            })
+            const action =  await deleteDeck(structure)
+            await userDispatch(action)
+            dispatchBackendActions(action.decks);
         }
 
-        const handleDeckRename = (id,name) => {
-            const structure = {
-                payload: {
-                    itemId: id,
-                     decks,
-                     title: name,
+        const handleDeckRename = async(id,e) => {
+            if (e.charCode === 13) {
+                const name = e.target.value === '' ? "Untitled" : e.target.value
+                const structure = {
+                    payload: {
+                        itemId: id,
+                        decks,
+                        title: name,
+                    }
                 }
+            const action =  await renameDeck(structure)
+            await userDispatch(action)
+            dispatchBackendActions(action.decks);
             }
-            const action =  renameDeck(structure)
-            action.then(data => {
-                userDispatch(data)
-            })
         }
 
         const getIcon = ( item: TreeItem, onExpand: (itemId: ItemId) => void, onCollapse: (itemId: ItemId) => void) =>  {
@@ -214,17 +213,16 @@ import CardMenu from "./CardMenu";
         const getRHSIcon = ( item: TreeItem, onExpand: (itemId: ItemId) => void, onCollapse: (itemId: ItemId) => void) =>  {
             return( 
                     <>
-                        <Box   display="flex"  flexDirection="row" alignItems="center" justifyContent="flex-start"
+                        <Box display="flex"  flexDirection="row" alignItems="center" justifyContent="flex-start"
                         >
                             <TreeButton status={item.status} 
                             handleAddSubDeck={(id,children) => handleAddSubDeck(id,children)}
                             itemId={item.id} itemChildren={item.children} />
                             <CardMenu 
                             handleDeckDelete={(id)=>handleDeckDelete(id)}
-                            handleDeckRename={(id,name)=>handleDeckRename(id,name)}
-                            status={item.status} itemId={item.id} > 
-                                <CardRename handleDeckRename={(name)=>handleDeckRename(item.id,name)} initialName={item.data.title} />
-                            </CardMenu>
+                            toggleIsInEditMode={(id)=>toggleIsInEditMode(id)}
+                            status={item.status} itemId={item.id} /> 
+                            
                         </Box>
 
                     </>
@@ -236,7 +234,24 @@ import CardMenu from "./CardMenu";
             return (
                 <div ref={provided.innerRef} {...provided.draggableProps}
                 >
-                    <AkNavigationItem
+                    {
+                        item.isInEditMode 
+                        ? 
+                        <div>
+                            <TextField
+                                id="outlined-size-small"
+                                defaultValue={item.data.title}
+                                variant="outlined"
+                                size="small"
+                                className='editMode'
+                                fullWidth
+                                autoFocus
+                                onKeyPress={(e)=>handleDeckRename(item.id, e)}
+                                onBlur={(e)=>handleDeckRename(item.id, e)}
+                            />
+                        </div>
+                        :
+                        <AkNavigationItem
                         isDragging={snapshot.isDragging}
                         text={item.data ? item.data.title : ""}
                         icon={getIcon(item, onExpand, onCollapse)}
@@ -244,9 +259,8 @@ import CardMenu from "./CardMenu";
                         textAfter={getRHSIcon(item, onExpand, onCollapse)}
                         onMouseLeave={() => onHover(item.id,false)} 
                         onMouseEnter={() => onHover(item.id, true)}
-                        // onMouseOver={() => onHover(item.id, true)}
-                        // onMouseOut={() => onHover(item.id,false)}
                     />
+                    }    
                 </div>
             );
         };
@@ -282,6 +296,9 @@ import CardMenu from "./CardMenu";
             .emptyTitle{
               padding-left: 35px;
               color: #795548; 
+            }
+            .editMode{
+              padding-left: 20px;
             }
             .iconStyle{
                 color: #795548 !important

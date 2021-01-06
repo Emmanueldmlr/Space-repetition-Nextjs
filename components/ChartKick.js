@@ -10,7 +10,7 @@ const ChartKick = () => {
     "2020-10-12": 9, "2020-12-25": 11}
 
     return (
-        <LineChart label="cards per day" height="200px" data={data} />
+        <LineChart messages={{empty: "No data"}} label="cards per day" height="200px" data={data} />
     )
 }
 

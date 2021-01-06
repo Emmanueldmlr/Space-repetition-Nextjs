@@ -2,7 +2,7 @@ import axios from "axios";
 //import cookies from "next-cookies";
 
 const   token  = null; 
-const baseUrl = 'http://localhost:8000/api/';
+const baseUrl = 'http://localhost:2300/api/';
 
 class HttpService {
 

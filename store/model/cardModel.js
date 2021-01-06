@@ -5,11 +5,10 @@ import Tree, {
 import uuid from 'uuid-random';
 
 
+
 export const fetchDeck = async() => {
     try{
         const {data} = await FetchDeckService();
-        console.log(`DECK DATA`);
-        console.log(data);
         const decks = data.user.deck
         Object.keys(decks.items).map(function(key, index) {
             decks.items[key].isExpanded = false
@@ -34,20 +33,11 @@ export const fetchDeck = async() => {
 export const dragEnd = async(actions) => {
     const {data,source,destination} = actions.payload
     const item = moveItemOnTree(data, source, destination);
-    const requestPayload = {
-        deck : item
-    }
-    const result = await UpdateDeckService(requestPayload)
     const action = {
         type: 'DRAG_END',
         decks: item
-    }
-    if(result.data.status){
-        return action 
-    }
-    else{
-        console.log(result)
-    }
+    }  
+    return action 
 }
 
 export const createSubDeck = async(actions) => {
@@ -59,30 +49,17 @@ export const createSubDeck = async(actions) => {
         children:[], 
         hasChildren:false,
         isExpanded:false,
+        isInEditMode:false,
         status:false,
         data:{title: 'Untitled'}
     }
     const newItem = {...item.items, ...data}
     const decks = {...actions.payload.data, items: {...newItem}}
-
-    const requestPayload = {
-        deck : decks
-    }
-
-    const result = await UpdateDeckService(requestPayload)
-
     const action = {
         type: 'CREATE_SUB_DECK',
         decks: decks
-   }
-
-    if(result.data.status){
-        return action 
     }
-    else{
-        console.log(result)
-    }
-
+    return action 
 }
 
 export const deleteDeck = async(actions) => {
@@ -99,49 +76,24 @@ export const deleteDeck = async(actions) => {
         decks.items[key].children = removeChildId(decks.items[key].children, itemId)
     });
     decks.items[1].children = removeChildId(decks.items[1].children, itemId)
-   
-    const requestPayload = {
-        deck : decks
-    }
-    const result = await UpdateDeckService(requestPayload)
  
     const action = {
         type: 'DELETE_DECK',
         decks: decks
    }
-   if(result.data.status){
-        return action 
-   }
-   else{
-       console.log(result)
-   }
+   return action 
 }
 
 export const renameDeck = async(actions) => {
-    
     const data = {
         title : actions.payload.title
     }
-    const item = mutateTree(actions.payload.decks, actions.payload.itemId,{ data: data })
-   
-    const requestPayload = {
-        deck : item
-    }
-
-    const result = await UpdateDeckService(requestPayload)
- 
+    const item = mutateTree(actions.payload.decks, actions.payload.itemId,{ data: data, isInEditMode:false })
     const action = {
         type: 'RENAME_DECK',
         decks: item
-   }
-
-   if(result.data.status){
-        return action 
-   }
-   else{
-       console.log(result)
-   }
-    
+    }
+    return action 
 }
 
 const removeChildId = (children, id) => {
@@ -160,6 +112,7 @@ export const createDeck = async(actions) => {
         hasChildren:false,
         isExpanded:false,
         status:false,
+        isInEditMode: false,
         data:{title: 'Untitled'}
     }
 
@@ -167,25 +120,14 @@ export const createDeck = async(actions) => {
     item[1].children = [...item[1].children,id] 
     const newItem = {...actions.payload.decks.items, ...data}
     const decks = {...actions.payload.decks, items: {...newItem}}
-    const requestPayload = {
-        deck : decks
-    }
-    const result = await UpdateDeckService(requestPayload)
- 
+    
     const action = {
         type: 'CREATE_DECK',
         decks: decks
-   }
+    }
 
-   if(result.data.status){
-        return action 
-   }
-   else{
-       console.log(result)
-   }
-   
+    return action
 }
-
 
 export const treeActions = async(actions) => {
 
@@ -198,6 +140,10 @@ export const treeActions = async(actions) => {
 
         else if (actions.payload.type === "COLLAPSE"){
              item = mutateTree(data, itemId, { isExpanded: false })
+        }
+
+        else if (actions.payload.type === "EditMode"){
+             item = mutateTree(data, itemId, { isInEditMode: true })
         }
 
         else if (actions.payload.type === "EXPAND"){
@@ -218,6 +164,11 @@ export const treeActions = async(actions) => {
 
 
 
-
+export const dispatchBackendActions = async (deck) => {
+    const requestPayload = {
+        deck : deck
+    }
+    await UpdateDeckService(requestPayload)
+}
 
 
