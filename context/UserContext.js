@@ -64,7 +64,7 @@ const reducer = (state, action) => {
     case "ADD_DECKS": {
         return {
           ...state,
-          decks: action.payload.data
+          decks: action.decks
       };
     }
     case "LOGGED_IN": {

@@ -8,14 +8,9 @@ import useUserDispatch from '../hooks/useUserDispatch'
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 
-
-
-
-//import { v4 as uuidv4 } from 'uuid';
 import uuid from 'uuid-random';
 
-import {createSubDeck, dragEnd, fetchDeck,treeActions, deleteDeck, renameDeck, dispatchBackendActions} from '../store/model/cardModel'
-
+import Card from '../store/model/cardModel'
 
 import Tree, {
     RenderItemParams,
@@ -33,15 +28,14 @@ import CardMenu from "./CardMenu";
 
     const DragDropWithNextingTree = () => {
         const userDispatch = useUserDispatch();
+        const card = new Card()
         const { decks } = useUserState();
-        useEffect(() => {
-             const result = fetchDeck()
-             result.then(action => {
-                 userDispatch(action)
-             })
+        useEffect( async () => {
+             const result = await card.fetchDeck()
+             userDispatch(result)   
         }, [])
 
-        const onExpand = (itemId: ItemId) => {
+        const onExpand = async (itemId: ItemId) => {  
             const structure = {
                 payload: {
                     itemId: itemId,
@@ -49,13 +43,12 @@ import CardMenu from "./CardMenu";
                     type: "EXPAND",
                 }
             }
-            const action =  treeActions(structure)
-            action.then(data => {
-                userDispatch(data)
-            })
+            const action =  await card.treeActions(structure)
+            userDispatch(action)
+            
         };
 
-        const toggleIsInEditMode = (itemId: ItemId) => {
+        const toggleIsInEditMode = async (itemId: ItemId) => {
             const structure = {
                 payload: {
                     itemId: itemId,
@@ -63,13 +56,11 @@ import CardMenu from "./CardMenu";
                     type: "EditMode",
                 }
             }
-            const action =  treeActions(structure)
-            action.then(data => {
-                userDispatch(data)
-            })
+            const action =  await card.treeActions(structure)
+            userDispatch(action)
         }
 
-        const onCollapse = (itemId: ItemId) => {
+        const onCollapse = async (itemId: ItemId) => {
             const structure = {
                 payload: {
                     itemId: itemId,
@@ -77,10 +68,8 @@ import CardMenu from "./CardMenu";
                     type: "COLLAPSE",
                 }
             }
-            const action =  treeActions(structure)
-            action.then(data => {
-                userDispatch(data)
-            })
+            const action =  await card.treeActions(structure)
+            userDispatch(action)
         };
 
         const handleAddSubDeck = async (itemId, children) => {
@@ -94,9 +83,9 @@ import CardMenu from "./CardMenu";
                     id: id
                 }
             }
-            const action =  await createSubDeck(structure)
+            const action =  await card.createSubDeck(structure)
             await userDispatch(action)
-            dispatchBackendActions(action.decks);
+            card.dispatchBackendActions(action.decks);
         }
         const onDragEnd = async( source: TreeSourcePosition, destination?: TreeDestinationPosition) => {
             if (!destination) {
@@ -109,12 +98,12 @@ import CardMenu from "./CardMenu";
                     destination: destination
                 }
             }
-            const action = await dragEnd(structure)
+            const action = await card.dragEnd(structure)
             await userDispatch(action)
-            dispatchBackendActions(action.decks);
+            card.dispatchBackendActions(action.decks);
         };
 
-        const onHover =  (itemId, status) => {
+        const onHover =  async (itemId, status) => {
             const structure = {
                 payload: {
                     itemId: itemId,
@@ -123,11 +112,9 @@ import CardMenu from "./CardMenu";
                     type: "ToggleStatus"
                 }
             }
-            const action =   treeActions(structure)
-             action.then(data => {
-                 userDispatch(data)
-            })
-            
+            const action =  await card.treeActions(structure)
+            userDispatch(action)
+
         }
 
         const handleDeckDelete = async(id) => {
@@ -138,9 +125,9 @@ import CardMenu from "./CardMenu";
                     type: "DeleteDeck"
                 }
             }
-            const action =  await deleteDeck(structure)
-            await userDispatch(action)
-            dispatchBackendActions(action.decks);
+            const action =  await card.deleteDeck(structure)
+             userDispatch(action)
+            card.dispatchBackendActions(action.decks);
         }
 
         const handleDeckRename = async(id,e) => {
@@ -153,9 +140,9 @@ import CardMenu from "./CardMenu";
                         title: name,
                     }
                 }
-            const action =  await renameDeck(structure)
-            await userDispatch(action)
-            dispatchBackendActions(action.decks);
+                const action =  await card.renameDeck(structure)
+                await userDispatch(action)
+                card.dispatchBackendActions(action.decks);
             }
         }
 

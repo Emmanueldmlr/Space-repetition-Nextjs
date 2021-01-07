@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import SideNav from './SideNav.tsx'
 import useUserDispatch from '../hooks/useUserDispatch'
-import {createDeck, dispatchBackendActions} from '../store/model/cardModel'
+import Card from '../store/model/cardModel'
 import useUserState from '../hooks/useUserState'
 import { makeStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -21,7 +21,6 @@ import { faAngleDoubleLeft} from '@fortawesome/free-solid-svg-icons'
 
 const drawerWidth = 300
 const useStyles = makeStyles((theme) => ({
-   // const drawerWidth = 300
   root: {
     display: 'flex',
   },
@@ -60,14 +59,6 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
-//   drawerHeader: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     padding: theme.spacing(1),
-//     ...theme.mixins.toolbar,
-//     justifyContent: 'center',
-    
-//   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -113,14 +104,15 @@ const SideBar = ({handleDrawerClose, open}) => {
     const userDispatch = useUserDispatch();
     
     const handleAddDeck = async() => {
+        const card = new Card()
         const structure = {
             payload: {
                 decks: decks,
             }
         }
-        const action =  await createDeck(structure)
+        const action =  await card.createDeck(structure)
         await userDispatch(action)
-        dispatchBackendActions(action.decks);
+        card.dispatchBackendActions(action.decks);
     }
 
     return (
